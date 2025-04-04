@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Final - Rafael</title>
+</head>
+<style>
+    * {
+        margin: 0
+    }
+</style>
+<body>
+    <canvas id="canvas1"></canvas>
+    <script src="Keys.js"></script>
+    <script src="Entity.js"></script>
+    <script src="Buttons.js"></script>
+    <script src="Characters.js"></script>
+    <script src="Castle.js"></script>
+    <script src="Weapons.js"></script>
+    <script src="Projectile.js"></script>
+    <script src="Projectiles.js"></script>
+    <script src="Enemys.js"></script>
+    <script src="Enemy.js"></script>
+    <script src="GameController.js"></script>
+    <script src="Coin.js"></script>
+    <script src="Hud.js"></script>
+    <script src="Sound.js"></script>
+    <script>
+        canvas = document.getElementById("canvas1");
+        canvas.height = innerHeight;
+        canvas.width = innerWidth;
+        context = canvas.getContext("2d")
+        let FPS = 30;
+        let timer = setInterval(startMenu, 1000/FPS)
+        let MenuOptions = 0;
+        let difficult = 1;
+        let difficultT = "MÉDIO"
+        let keys = new Keys();
+        let keysP = [];
+        let keysC = 0;
+        let keysCLimit = 3;
+        let buttons = [];
+        let switching = false
+        let player;
+        let castle;
+        let weapon;
+        let mouseX;
+        let mouseY;
+        let mousePressed = false
+        let totalPlayers = 0;
+        let totalPlayersT = "UM JOGADOR";
+        let mouseColliding = 0;
+        let startMenuC = 0;
+        let startMenuO = 1;
+        let projectiles;
+        let enemys;
+        let gameStatus;
+        let menuStatus = new MenuStatus();
+        let mouseC = 3;
+        let hud = new Hud();
+        let sounds = new Sounds();
+        let finalScreenC = 0;
+        let finalScreenCcoins = 0;
+        let finalScreenO = 0;
+        let finalT = -1;
+        let weaponEquipped = 0;
+        let waveController;
+        let controlsS = false;
+        let cheatCode = "";
+        let cheatCodeT = 0;
+        let cheatCodes = [false, false];
+        keysP[87] = false;
+        keysP[83] = false;
+        keysP[65] = false;
+        keysP[68] = false;
+        keysP[13] = false;
+        function atualizePos()
+        {   keysC += keysC < keysCLimit;
+            if(!switching && MenuOptions != -2)
+            {   if(controlsS)
+                {   let max = controlsS == 2 ? 5 : 7
+                    if(keysP[keys.keyLeft] && keysC == keysCLimit)
+                    {   if(buttons[MenuOptions].text == "SOM")
+                        {   buttons[MenuOptions].clicked(-1)
+                        }
+                        else
+                        {   MenuOptions = (MenuOptions-1+buttons.length)%buttons.length;
+                            keysC = 0;
+                        }
+                        
+                    }
+                    if(keysP[keys.keyRight] && keysC == keysCLimit)
+                    {   MenuOptions = (MenuOptions+1)%buttons.length;
+                        keysC = 0;
+                    }
+                    if(keysP[keys.keyUp] && keysC == keysCLimit)
+                    {   if(MenuOptions <= max-1)
+                        {   MenuOptions = buttons.length-(1*buttons.length%5!=0)-(max-(buttons.length%5))+MenuOptions;
+                            MenuOptions = MenuOptions >= buttons.length ? 0 : MenuOptions;
+                        }
+                        else
+                        {  MenuOptions = (MenuOptions-max+buttons.length)%buttons.length;
+                        }
+                        keysC = 0;
+                    }
+                    if(keysP[keys.keyDown] && keysC == keysCLimit)
+                    {   if(MenuOptions >= Math.trunc(buttons.length/max)*max)
+                        {   MenuOptions = MenuOptions%max;
+                        }
+                        else
+                        {   if(MenuOptions+max >= buttons.length)
+                            {    MenuOptions = buttons.length-1;
+                            }   
+                            else
+                            {  MenuOptions = (MenuOptions+max)%buttons.length;
+                            }
+                        }
+                        keysC = 0;
+                    }
+                }
+                else
+                {   if((keysP[keys.keyUp] || keysP[keys.keyLeft]) && keysC == keysCLimit)
+                    {   if(buttons[MenuOptions] != undefined && buttons[MenuOptions].text == "SOM" && keysP[keys.keyLeft])
+                        {   buttons[MenuOptions].clicked(-1)
+                        }
+                        else
+                        {  MenuOptions = (MenuOptions-1+buttons.length)%buttons.length;
+                        }
+                        keysC = 0;
+                    }
+                    if((keysP[keys.keyDown] || keysP[keys.keyRight]) && keysC == keysCLimit)
+                    {   if(buttons[MenuOptions] != undefined && buttons[MenuOptions].text == "SOM" && keysP[keys.keyRight])
+                        {   buttons[MenuOptions].clicked(1)
+                        }
+                        else
+                        {   MenuOptions = (MenuOptions+1)%buttons.length;
+                        }
+                        keysC = 0;
+                    }
+                }
+                if(keysP[keys.keyConfirm] && keysC == keysCLimit)
+                    {   buttons[MenuOptions].clicked(0)    
+                        sounds.click.play()
+                        if(finalScreenC > 0)
+                        {   finalScreenC = 0;
+                            finalScreenCcoins = 0;
+                            finalScreenO = 0;
+                        }        
+                        keysC = 0;
+                    }
+            }
+        }
+        function atualizeButtons()
+        {   for(let i = 0; (i < buttons.length); i++)
+            {   buttons[i].draw()    
+                if(i == MenuOptions)   
+                {   buttons[i].selected = true;
+                }
+                else
+                {  buttons[i].selected = false; 
+                }
+            }
+        }
+
+        function startMenu()
+        {   context.fillStyle = "black";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            context.font = "60px Arial";
+            context.textAlign = 'left';
+            context.textBaseline = 'middle';
+            context.fillStyle = `rgba(255, 255, 255, ${startMenuO})`;
+            context.fillText("Controles Padrão:", 20, 50);
+            context.font = "55px Arial";
+            context.font = "50px Arial";
+            context.fillText("Cima: W", 20, 190);
+            context.fillText("Baixo: S", 20, 260);
+            context.fillText("Direita: D", 20, 330);
+            context.fillText("Esquerda: A", 20, 400);
+            context.fillText("Confirmar: Enter", 20, 470);
+            context.fillText("Atirar: Mouse", 20, 540);
+            if((mousePressed || keysP.includes(true)) && startMenuC == 0)
+            {   startMenuC++;
+                startMenuO-=.1;
+            }
+            if(startMenuC > 0)
+            {   startMenuO-=.1;
+                startMenuC++;
+                if(startMenuC == 10)
+                {   clearInterval(timer)
+                    timer = setInterval(menu, 1000/FPS)
+                    buttons = [new SwitchSButton(canvas.width*.3, canvas.height*.3, canvas.width*.4, canvas.height*.1, "JOGAR", game), new SwitchSButton(canvas.width*.3, canvas.height*.45, canvas.width*.4, canvas.height*.1, "EQUIPAMENTOS", equipaments), new SwitchSButton(canvas.width*.3, canvas.height*.6, canvas.width*.4, canvas.height*.1, "CONFIGURAÇÕES", configurations), new ButtonDifficult(canvas.width*.3, canvas.height*.75, canvas.width*.4, canvas.height*.1, `DIFICULDADE: ${difficultT}`)]
+                    MenuOptions = 0;
+                }
+            }
+        }
+        function menu()
+        {   context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            txt(canvas.width*.5, canvas.height*.15, 'CASTLE INVADERS', 100,'white');
+            hud.draw();
+
+            atualizeButtons()
+            atualizePos()
+            if(cheatCode!="")
+            {   if(cheatCodeT == 10)
+                {   cheatCode = "";
+                    cheatCodeT = 0;
+                }
+                cheatCodeT++;      
+                if(cheatCode[0] != "D")         
+                {   cheatCode = "";
+                } 
+            }
+            
+        }
+        function configurations()
+        {   context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            txt(canvas.width*.5, canvas.height*.15, 'CONFIGURAÇÕES', 100,'white');
+            
+            atualizeButtons()
+            atualizePos()
+        }
+        function controls()
+        {   context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            txt(canvas.width*.5, canvas.height*.15, 'CONTROLES', 100,'white');
+
+            atualizeButtons();
+            atualizePos();
+            if(!switching)
+            {   for (let i = 1; i < buttons.length; i++) 
+                {   buttons[i].opacity = 1;
+                }
+                buttons[0].text = buttons[0].defaultText
+            }
+            else
+            {   for (let i = 1; i < buttons.length; i++) 
+                {   buttons[i].opacity = 0;
+                }
+                buttons[0].text = keys.controlsNames[keys.switched]+": "+keys.keysLetters[keys.switched]
+                controlsSwitch(keysP.indexOf(true))
+            }
+        }
+        document.addEventListener("keydown",movimentoD);
+        document.addEventListener("keyup",  movimentoU);
+        
+        document.addEventListener("mousemove", onMouseMove);
+        document.addEventListener("mousedown", onMouseDown);
+        document.addEventListener("mouseup", onMouseUp);
+        
+        function controlsSwitch(key)
+        {   if(key!=-1&&keysC == keysCLimit)
+            {   if(keys.nKeys.includes(key))
+                {   alert("tecla ja em uso!")
+                    keysC = 0;
+                }
+                else
+                {   if(key != 13)
+                    {   keys.nKeys.push(key)
+                        keysC = 0;
+                        keys.switched++;
+                    }
+                    else
+                    {   alert("tecla de confirmação")
+                    }
+                }
+                if(key != "mouse")
+                {   keysP[key] = false
+                }
+            }
+            if(keys.switched == keys.controlsNames.length)
+            {   keys.keysLetters = [];
+                for(let i = 0; (i < keys.nKeys.length); i++)
+                {   switch(i)
+                    {   case 0:
+                            keys.keyUp = keys.nKeys[i];
+                        break;
+                        case 1:
+                            keys.keyDown = keys.nKeys[i];
+                        break;
+                        case 2:
+                            keys.keyLeft = keys.nKeys[i];
+                        break;
+                        case 3:
+                            keys.keyRight = keys.nKeys[i];
+                        break;
+                        case 4:
+                            keys.keyFire = keys.nKeys[i];
+                        break;
+                    }
+                    if(keys.nKeys[i] != "mouse")
+                    {   keys.keysLetters.push(String.fromCharCode(keys.nKeys[i]));
+                        keysP[keys.nKeys[i]]=false;
+                    }
+                    else
+                    {   keys.keysLetters.push(keys.nKeys[i])
+                    }
+                }
+                keys.nKeys = []
+                keys.switched = 0;
+                switching = false; 
+            }    
+        }
+        function equipaments()
+        {   context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            txt(canvas.width*.5, canvas.height*.15, 'EQUIPAMENTOS', 100,'white');
+            hud.draw();
+            
+            atualizeButtons()
+            atualizePos()
+            
+        }
+        function shop()
+        {   context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            txt(canvas.width*.5, canvas.height*.15, 'LOJA', 100,'white');
+            atualizeButtons();
+            atualizePos();
+            hud.draw();
+
+        }
+        function inventory()
+        {   context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            txt(canvas.width*.5, canvas.height*.15, 'INVENTÁRIO', 100,'white');
+            atualizeButtons();
+            atualizePos();
+        }
+        // let multiplayer = false;
+        // let players = [new Character(canvas.width/2-64, canvas.height-112, 96, 96, "imgs/perso-01.png")];
+        function game()
+        {   if(cheatCode!="")
+            {   console.log("ta aq")
+                if(cheatCodeT == 10)
+                {   cheatCode = "";
+                    cheatCodeT = 0;
+                }
+                if(cheatCode[0] != "B")         
+                {   cheatCode = "";
+                } 
+                cheatCodeT++;                
+            }
+            mouseC += mouseC < 3;
+            context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            if(!waveController.freezed)
+            {   waveController.update();
+                weapon.update();
+                player.update();
+                projectiles.update();
+                enemys.update();
+                castle.draw();
+                projectiles.draw();
+                player.draw();
+                weapon.draw();
+                if((keysP[keys.keyFire] == undefined ? mousePressed : keysP[keys.keyFire]) && weapon.fireRate == 0 && mouseC == 3)
+                {   mouseCords = {x: mouseX-(weapon.x+weapon.width/2), y: mouseY-weapon.y}
+                    mouseCords.h = Math.sqrt((mouseCords.x**2)+(mouseCords.y**2))
+                    weapon.shoot(mouseCords)
+                    weapon.fireRate = weapon.OfireRate;
+                }
+                hud.draw();
+                
+                
+            }
+            else
+            {   hud.draw();
+                castle.draw();
+                player.draw();
+                weapon.draw();
+                atualizeButtons();
+                atualizePos();
+            }
+            
+        }
+        function finalScreen()
+        {   context.fillStyle = "black";
+            context.fillRect(0,0, canvas.width, canvas.height);
+
+            finalScreenO += (finalScreenO<=1)*.1
+            finalScreenC += finalScreenC < FPS*2-10;
+            finalScreenCcoins += (gameStatus.gameCoins/FPS)*((finalScreenC > FPS-10)*(Math.ceil(finalScreenCcoins)<gameStatus.gameCoins));
+            txt(canvas.width/2, canvas.height/2-100, finalT == 0 ? "YOU WIN" : "GAME OVER", 100, finalT == 0 ? `rgba(255, 255, 255, ${finalScreenO})` : `rgba(255, 0, 0, ${finalScreenO})`)
+            txt(canvas.width/2, canvas.height/2, "+"+ Math.ceil(finalScreenCcoins) +" coins", 100, `rgba(252, 255, 100, ${finalScreenO})`)
+
+            if(finalScreenC >= FPS*2-20 && finalScreenC < FPS*2-10)
+            {   for(let i = 0; (i < buttons.length); i++)
+                {   buttons[i].opacityA = buttons[i].opacityA == undefined ? 0 : buttons[i].opacityA;
+                    buttons[i].opacityA = buttons[i].opacityA < 0.9 ? Math.trunc(buttons[i].opacityA*10+1)/10 : undefined;
+                }
+            }
+            if(finalScreenC >= FPS*2-20)
+            {   atualizeButtons();
+                atualizePos();
+            }
+
+        }
+        function upgradesShop()
+        {   context.fillStyle = "#56DF6D";
+            context.fillRect(0,0, canvas.width, canvas.height);
+            txt(canvas.width*.5, canvas.height*.15, 'UPGRADES', 100,'white');
+
+            hud.draw();
+            atualizeButtons()
+            atualizePos()
+        }
+        
+        function onMouseMove()
+        {   mouseX = event.clientX;
+            mouseY = event.clientY;
+            if(MenuOptions != -2)
+            {   mouseCords = {x: mouseX, y: mouseY, width: 0, height: 0}
+                MenuOptions = -1;
+                for(let i = 0; (i < buttons.length); i++)
+                {   if(buttons[i].collide(mouseCords))
+                    {   MenuOptions = i;   
+                    }
+                }
+            }
+        }
+        
+        function onMouseDown(event)
+        {   if(mouseC == 3)
+            {   mousePressed = true;
+            }
+            if(MenuOptions > -1)
+            {   if(switching)
+                {   controlsSwitch("mouse")
+                }
+                else
+                {   buttons[MenuOptions].clicked(0)
+                    if(finalScreenC > 0)
+                    {   finalScreenC = 0;
+                        finalScreenCcoins = 0;
+                        finalScreenO = 0;
+                    }   
+                    sounds.click.play()
+                    mouseC = 0;
+                }
+            }
+        }
+        function onMouseUp(event)
+        {   mousePressed = false;
+        }
+        function movimentoD(event)
+        {   keysP[event.keyCode] = true;
+        }
+        function movimentoU(event)
+        {   keysP[event.keyCode] = false;
+            if(MenuOptions != -2)
+            {   keysP[keysP.indexOf(true)] = false;
+            }
+            cheatCode+=String.fromCharCode(event.keyCode);
+            if(cheatCode == "BETITO LINDAO".substring(0,cheatCode.length) || cheatCode == "DEV TESTE".substring(0,cheatCode.length))
+            {   cheatCodeT = 0;
+                console.log(cheatCode)
+                if(cheatCode == "BETITO LINDAO")
+                {   console.log("cheat code betito lindão ativado!")
+                 
+                    cheatCodeApply(0);
+                }
+                if(cheatCode == "DEV TESTE")
+                {   console.log("cheat code dev teste ativado!") 
+                    cheatCodeApply(1);
+                }
+            }
+            else
+            {   cheatCode = "";
+            }
+        }
+        function cheatCodeApply(cheat)
+        {   switch(cheat)
+            {   case 0:
+                    castle.defenseO = 0; 
+                    castle.defense = 0; 
+                    weapon.damage = 100000; 
+                    weapon.damageO = 100000; 
+                    weapon.ProjectileSO = 50; 
+                    weapon.ProjectileS = 50; 
+                    weapon.projectileRO = 20;
+                    weapon.projectileR = 20;
+                    weapon.critChanceO = 100;
+                    weapon.critDamageO = 10000000;
+                    weapon.OfireRateO = 0;
+                    weapon.OfireRate = 0;
+                    gameStatus.upgrades[5].effect = -10000000000000;
+                    this.projectileRO = 5;
+                break;
+                case 1:
+                    menuStatus.coins = 9999999999;
+                    for(let i = 0; (i < menuStatus.inventory.length); i++)
+                    {   menuStatus.inventory[i].unlocked = 1;
+                    }
+                    for(let i = 0; (i < menuStatus.shopItens.length); i++)
+                    {   menuStatus.shopItens[i].buyed = 1;
+                    }
+                    for(let i = 0; (i < menuStatus.upgrades.length); i++)
+                    {   menuStatus.upgrades[i].effect += menuStatus.upgrades[i].up*menuStatus.upgrades[i].maxAmount;
+                        menuStatus.upgrades[i].actualAmount =  menuStatus.upgrades[i].maxAmount;
+                        menuStatus.upgrades[i].price = "Maximizado";
+                    }
+                    
+                break;
+            }
+            cheatCodes[cheat] = true
+        }
+        function txt(x,y,tex,px,clr)
+        {   context.font = `${px}px Arial`;
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillStyle = clr;
+            context.fillText(tex, x, y);
+        }
+        function difficultSwitch()
+        {   difficult = (difficult%1.5)+0.5
+            switch(difficult)
+            {   case 0.5:
+                    difficultT = "FÁCIL"
+                break;
+                case 1:
+                    difficultT = "MÉDIO"
+                break;
+                case 1.5:
+                    difficultT = "DIFÍCIL"
+                break;
+            }
+        }
+        /*
+        sons
+        sprites
+        nivelar dificuldade / alterarStatus
+        talvez adicionar coisas no boss(se der tempo)
+        */
+    </script>
+</body>
+</html>
