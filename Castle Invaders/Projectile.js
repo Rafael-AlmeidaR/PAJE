@@ -14,6 +14,7 @@ class Projectile extends Entity
         this.xVelocity = this.speed*this.mouse.x/this.mouse.h;
         this.yVelocity = this.speed*this.mouse.y/this.mouse.h;
         this.fireSetChance = fireSetChance;
+        weapon.sound.play();
     }
     draw()
     {   context.fillStyle = this.color;
@@ -29,7 +30,9 @@ class Projectile extends Entity
     collide(entity)
     {   for (let i = 0; i < entity.length && projectiles.Allprojectiles.length > 0; i++) 
         {   if(super.collide(entity[i]))
-            {   let critical = Math.ceil(Math.random()*100);
+            {   sounds.enemyHit.currentTime = .9;
+                sounds.enemyHit.play();
+                let critical = Math.ceil(Math.random()*100);
                 let lifeSteal = Math.ceil(Math.random()*100);
                 let fire = Math.ceil(Math.random()*100)
                 entity[i].hp -= weapon.damage*(critical <= weapon.critChance ? weapon.critDamage : 1);  
@@ -67,13 +70,13 @@ class Slash extends Projectile
         this.width = width;
         this.height = height;
         this.mouse = mouse;
-        this.speed = 6;
+        this.speed = 6*canvas.height/767;
         this.range = FPS;
         this.xVelocity = this.speed*this.mouse.x/this.mouse.h;
         this.yVelocity = this.speed*this.mouse.y/this.mouse.h;
         this.accX = (this.xVelocity*100/this.mouse.x)/this.range;
         this.accY = (this.yVelocity*100/this.mouse.y)/this.range;
-        this.color = "white"
+        this.color = "white";
     }
     draw()
     {   context.fillStyle = this.color;
@@ -101,3 +104,10 @@ class EnemyProjectile extends Entity
     {   this.y += this.speed;
     }
 }
+
+/*
+
+música
+som dano
+
+*/

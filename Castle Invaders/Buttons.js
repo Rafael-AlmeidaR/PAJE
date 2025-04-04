@@ -308,9 +308,9 @@ class SoundButton extends Button
     draw()
     {   super.draw();
         let lar = this.width/4*sounds.volume;
-        context.fillRect(this.x + this.width/2+this.width/8, this.y+this.height/2-this.height/8, lar, this.height/4)
+        context.fillRect(this.x + this.width/2+this.width/8, this.y+this.height/2-this.height/8, lar, this.height/4);
         context.beginPath()
-        context.arc(this.x + this.width/2+this.width/8+lar, this.y+this.height/2-this.height/8+7.5, 15, 0, Math.PI*2, true)
+        context.arc(this.x + this.width/2+this.width/8+lar, this.y+this.height/2-this.height/8+7.5, 15, 0, Math.PI*2, true);
         context.closePath()
         context.fill();
     }

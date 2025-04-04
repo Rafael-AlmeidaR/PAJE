@@ -37,7 +37,8 @@ class Enemys
         {   this.bullets[i].update();
             this.bullets[i].draw();
             if(this.bullets[i].collide(castle))
-            {   castle.hp -= this.bullets[i].damage
+            {   castle.hp -= this.bullets[i].damage;
+                sounds.hit.play();
                 this.bullets.splice(i ,1)
             }
         }

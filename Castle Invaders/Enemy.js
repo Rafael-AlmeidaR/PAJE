@@ -31,7 +31,8 @@ class Enemy extends GameEntity
             }
             else
             {   if(this.cooldown <= 0)
-                {   castle.hp -= this.damage*castle.defense;  
+                {   sounds.hit.play();
+                    castle.hp -= this.damage*castle.defense;  
                     let thorns = Math.ceil(Math.random()*100);
                     if(thorns <= castle.thorns)
                     {   this.hp -= this.damage;
@@ -54,7 +55,8 @@ class Enemy extends GameEntity
             }
         }
         if(castle.hp <= 0)
-        {   finalT = 1;
+        {   sounds.death.play();
+            finalT = 1;
             MenuOptions = -1; 
             buttons = [new EndGameButton(canvas.width*.3, canvas.height*.75, canvas.width*.4, canvas.height*.1, "VOLTAR PARA O MENU")]
             clearInterval(timer)

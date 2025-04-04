@@ -11,9 +11,11 @@ class Weapon extends GameEntity
         this.lifeStealAmountO;
         this.knockbackO;
         this.setFireChance = 0;
+        this.sound;
     }
     shoot(mouseCords)
-    {   projectiles.Allprojectiles.push(new Projectile(this.x+this.width/2, this.y, this.projectileR, mouseCords, this.ProjectileS, "cyan", this.setFireChance))
+    {   this.sound.currentTime = 0;
+        projectiles.Allprojectiles.push(new Projectile(this.x+this.width/2, this.y, this.projectileR, mouseCords, this.ProjectileS, "cyan", this.setFireChance))
     }
     update()
     {   this.fireRate -= this.fireRate>0;
@@ -43,6 +45,7 @@ class Bow extends Weapon
         this.lifeStealChanceO = 0;
         this.lifeStealAmountO = .01;
         this.knockbackO = 0;
+        this.sound = sounds.slingshot;
         this.weaponsConstructor();
     }
 }
@@ -57,10 +60,12 @@ class Sword extends Weapon
         this.lifeStealChanceO = 0;
         this.lifeStealAmountO = .01;
         this.knockbackO = 0;
+        this.sound = sounds.slash;
         this.weaponsConstructor();
     }
     shoot(mouseCords)
-    {   projectiles.Allprojectiles.push(new Slash(this.x+this.width/2, this.y, 100, 50, mouseCords, this.ProjectileS))
+    {   this.sound.pause();
+        projectiles.Allprojectiles.push(new Slash(this.x+this.width/2-this.projectileR*5, this.y-this.projectileR*5, this.projectileR*10, this.projectileR*5, mouseCords, this.ProjectileS))
     }
 }
 class Ak47 extends Weapon
@@ -75,6 +80,7 @@ class Ak47 extends Weapon
         this.lifeStealChanceO = 0;
         this.lifeStealAmountO = .01;
         this.knockbackO = 0;
+        this.sound = sounds.ak;
         this.weaponsConstructor();
     }
 }
@@ -90,6 +96,7 @@ class Grimore extends Weapon
         this.lifeStealChanceO = 0;
         this.lifeStealAmountO = .01;
         this.knockbackO = 0;
+        this.sound = sounds.fireball;
         this.weaponsConstructor();
         this.setFireChance = 25;
     }
