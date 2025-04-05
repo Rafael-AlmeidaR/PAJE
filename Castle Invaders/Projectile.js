@@ -33,13 +33,10 @@ class Projectile extends Entity
                 let lifeSteal = Math.ceil(Math.random()*100);
                 let fire = Math.ceil(Math.random()*100)
                 if(lifeSteal <= weapon.lifeStealChance) 
-                {   if(castle.hp >= castle.Maxhp)
+                {   let hpSum = entity[i].hp*weapon.lifeStealAmount*(1+(critical <= weapon.critChance));
+                    castle.hp += hpSum > castle.hp *.1 ? castle.hp*.1 : hpSum;
+                    if(castle.hp >= castle.Maxhp)
                     {   castle.hp = castle.Maxhp;
-                    }
-                    else
-                    {   let hpSum = entity[i].hp*weapon.lifeStealAmount*(1+(critical <= weapon.critChance));
-                        castle.hp += hpSum > castle.hp *.1 ? castle.hp*.1 : hpSum;
-                        console.log(weapon.lifeStealAmount, 1+(critical <= weapon.critChance))
                     }
                 }
                 entity[i].hp -= weapon.damage*(critical <= weapon.critChance ? weapon.critDamage : 1);

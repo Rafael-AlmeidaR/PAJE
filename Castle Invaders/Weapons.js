@@ -81,7 +81,7 @@ class Ak47 extends Weapon
         this.critDamageO = 1.5;
         this.lifeStealChanceO = 0;
         this.lifeStealAmountO = .01;
-        this.knockbackO = 6;
+        this.knockbackO = 8;
         this.sound = sounds.ak;
         this.weaponsConstructor();
         this.imgP = new Image;

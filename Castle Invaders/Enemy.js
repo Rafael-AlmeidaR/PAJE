@@ -138,7 +138,7 @@ class Enemy3 extends Enemy
     {   super(x, y, 96, 96, "imgs/enemy3.png")
         this.stepPoint.y = Math.round(castle.y-canvas.height*0.35);
         this.stepPoint.x -= this.width/2;
-        this.speed = 5;
+        this.speed = 4;
         this.Maxhp = (75*difficult)*gameStatus.waveBooster;
         this.hp = this.Maxhp;
         this.damage = (3*difficult)*gameStatus.waveBooster;
@@ -172,7 +172,10 @@ class Enemy4 extends Enemy
         this.cooldown = 0;
         this.attackSpeed = Math.round((10/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
         this.attackSpeed = (this.attackSpeed < 5 ? 5 : this.attackSpeed)+castle.invencibility;
-        this.coinsDrop = 1000*(difficult/.5);
+        this.coinsDrop = 100;
+        if(difficult > .5)
+        {   this.coinsDrop *= ((difficult/.5)*10);
+        }
         this.type = 1;
     }
 }

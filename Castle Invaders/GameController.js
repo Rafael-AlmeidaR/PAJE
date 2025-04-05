@@ -124,14 +124,24 @@ class WaveController
     {   this.timer2 += this.timer2 < FPS;
         if(this.spawnTime <= 0)
         {   this.spawnTime = 20/1+(Math.trunc(gameStatus.wave/2)*.1);
+            let stop = false;
             if(Math.random()*50<=this.spawnChance)
             {   this.spawn(0);
+                stop = Math.random() >= .9;
+                console.log(stop)
             }
-            if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 3)
-            {   this.spawn(1);
-            }
-            if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 6)
-            {   this.spawn(2);
+            else
+            {   if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 3 && !stop)
+                {   this.spawn(1);
+                    stop = Math.random() >= .9;
+                    console.log(stop)
+                }
+                else
+                {   if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 6 && !stop)
+                    {   this.spawn(2);
+                        console.log(stop)
+                    }
+                }
             }
             if((gameStatus.wave%10) == 0 && this.totalBoss > 0)
             {   this.spawn(3);
