@@ -1,5 +1,5 @@
 class Projectile extends Entity
-{   constructor(x, y, radius, mouse, speed, color, fireSetChance)
+{   constructor(x, y, width, height,img, mouse, speed, fireSetChance)
     {   super();
         this.x = x;
         this.y = y;
@@ -7,21 +7,18 @@ class Projectile extends Entity
         this.xVelocity;
         this.xVelocity;
         this.speed = speed;
-        this.radius = radius;
-        this.color = color;
-        this.width = this.radius*2;
-        this.height = this.radius*2;
+        this.img = new Image;
+        this.img.src = img;
+        
+        this.width = width;
+        this.height = height;
         this.xVelocity = this.speed*this.mouse.x/this.mouse.h;
         this.yVelocity = this.speed*this.mouse.y/this.mouse.h;
         this.fireSetChance = fireSetChance;
         weapon.sound.play();
     }
     draw()
-    {   context.fillStyle = this.color;
-        context.beginPath()
-        context.arc(this.x, this.y, this.radius, 0, Math.PI*2, true)
-        context.closePath()
-        context.fill();
+    {   context.drawImage(this.img, this.x, this.y, this.width, this.height)
     }
     update()
     {   this.y += this.yVelocity;
@@ -35,16 +32,18 @@ class Projectile extends Entity
                 let critical = Math.ceil(Math.random()*100);
                 let lifeSteal = Math.ceil(Math.random()*100);
                 let fire = Math.ceil(Math.random()*100)
-                entity[i].hp -= weapon.damage*(critical <= weapon.critChance ? weapon.critDamage : 1);  
-                entity[i].knockback = weapon.knockback;
                 if(lifeSteal <= weapon.lifeStealChance) 
                 {   if(castle.hp >= castle.Maxhp)
                     {   castle.hp = castle.Maxhp;
                     }
                     else
-                    {   castle.hp += entity[i].hp*weapon.lifeStealAmount*(1+(critical <= weapon.critChance));
+                    {   let hpSum = entity[i].hp*weapon.lifeStealAmount*(1+(critical <= weapon.critChance));
+                        castle.hp += hpSum > castle.hp *.1 ? castle.hp*.1 : hpSum;
+                        console.log(weapon.lifeStealAmount, 1+(critical <= weapon.critChance))
                     }
                 }
+                entity[i].hp -= weapon.damage*(critical <= weapon.critChance ? weapon.critDamage : 1);
+                entity[i].knockback = weapon.knockback;
                 if(fire <= this.fireSetChance)
                 {   entity[i].burningDamage = weapon.damage/10;
                     entity[i].burningTime = 30;
@@ -76,11 +75,8 @@ class Slash extends Projectile
         this.yVelocity = this.speed*this.mouse.y/this.mouse.h;
         this.accX = (this.xVelocity*100/this.mouse.x)/this.range;
         this.accY = (this.yVelocity*100/this.mouse.y)/this.range;
-        this.color = "white";
-    }
-    draw()
-    {   context.fillStyle = this.color;
-        context.fillRect(this.x, this.y, this.width, this.height)
+        this.img = new Image;
+        this.img.src = "imgs/slash.png";
     }
     update()
     {   super.update();

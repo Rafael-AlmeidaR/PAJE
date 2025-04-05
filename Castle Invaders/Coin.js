@@ -17,7 +17,6 @@ class Item extends Coin
     {   super();
         this.timer = -30;
         this.img = new Image;
-        console.log(i)
         this.img.src = menuStatus.inventory[i].img;
     }
     draw()

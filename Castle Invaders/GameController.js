@@ -20,7 +20,7 @@ class GameStatus
             {name: "LifeSteal Chance",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
             {name: "LifeSteal Amount",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
             {name: "Thorns",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 4, upT: "+4%"},
-            {name: "knockback",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+2"},
+            {name: "knockback",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 3, upT: "+3"},
             {name: "full recovery", price: 0, priceR: 0,effect: 0, maxAmount: 99999999, actualAmount: 0, up: 1, upT: "Full Hp"},
             {name: "Upgrades Amount", price: 0, priceR: 0,effect: 0, maxAmount: 10, actualAmount: 0, up: 1, upT: "+1 upgrade"}
         ];
@@ -48,7 +48,7 @@ class GameStatus
         player =  new Character(canvas.width/2-48, canvas.height-128, 96, 96, "imgs/perso-01.png");
         switch(weaponEquipped)
         {   case 0: 
-                weapon = new Bow(canvas.width/2-48, canvas.height-176, 96, 48);
+                weapon = new Slingshot(canvas.width/2-48, canvas.height-176, 96, 48);
             break;
             case 1:
                 weapon = new Sword(canvas.width/2-48, canvas.height-176, 96, 48);
@@ -93,10 +93,10 @@ class MenuStatus
             {name: "LifeSteal Chance", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
             {name: "LifeSteal Amount", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
             {name: "Thorns", price: 100, priceR: 100, effect: 0, maxAmount: 3, actualAmount: 0, up: 4, upT: "+4%"},
-            {name: "knockback", price: 200, priceR: 200, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+2"},
+            {name: "knockback", price: 200, priceR: 200, effect: 0, maxAmount: 3, actualAmount: 0, up: 3, upT: "+3"},
         ]
         this.inventory = [
-            {equipped: 1, unlocked: 1,img: "imgs/bow.png"},
+            {equipped: 1, unlocked: 1,img: "imgs/slingshot.png"},
             {equipped: 0, unlocked: 0, img: "imgs/sword.png"},
             {equipped: 0, unlocked: 0, img: "imgs/gun.png"},
             {equipped: 0, unlocked: 0, shopI: 0, img: "imgs/grimore.png"},
@@ -123,15 +123,15 @@ class WaveController
     update()
     {   this.timer2 += this.timer2 < FPS;
         if(this.spawnTime <= 0)
-        {   this.spawnTime = 15;
+        {   this.spawnTime = 20/1+(Math.trunc(gameStatus.wave/2)*.1);
             if(Math.random()*50<=this.spawnChance)
-            {   this.spawn(0)
+            {   this.spawn(0);
             }
             if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 3)
-            {   this.spawn(1)
+            {   this.spawn(1);
             }
             if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 6)
-            {   this.spawn(2)
+            {   this.spawn(2);
             }
             if((gameStatus.wave%10) == 0 && this.totalBoss > 0)
             {   this.spawn(3);

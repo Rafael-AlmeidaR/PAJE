@@ -135,10 +135,12 @@ class UpgradeSButton extends Button
     }
     clicked()
     {   if(this.upgradeT.price != "Maximizado")
-        {   if(menuStatus.coins >= this.upgradeT.price)
+        {   if(menuStatus.coins >= this.upgradeT.price || menuStatus.coins == "∞")
             {   this.upgradeT.effect += this.upgradeT.up;
                 this.upgradeT.actualAmount ++;
-                menuStatus.coins -= this.upgradeT.price;
+                if(menuStatus.coins != "∞")
+                {    menuStatus.coins -= this.upgradeT.price;
+                }
                 this.upgradeT.price += this.upgradeT.priceR;
                 if(this.upgradeT.maxAmount == this.upgradeT.actualAmount)
                 {   this.upgradeT.price = "Maximizado";
@@ -212,7 +214,6 @@ class InventoryButton extends Button
             {   if(menuStatus.inventory[i].unlocked == 1)
                 {   menuStatus.inventory[i].equipped = i==this.i;
                 }
-                console.log(i)
             }
             weaponEquipped = this.i;
         }
@@ -293,9 +294,7 @@ class SoundButton extends Button
             break;
             default:
                 if(sounds.volume > 0 && clickT == -1)    
-                {   console.log(sounds.volume, Math.round(sounds.volume+.1*clickT*10)/10)
-                    sounds.volume = Math.round((sounds.volume*10)+(clickT))/10;
-                    console.log(sounds.volume, Math.round(sounds.volume+.1*clickT*10)/10)
+                {   sounds.volume = Math.round((sounds.volume*10)+(clickT))/10;
                 }
                 else
                 {   if(sounds.volume < 1 && clickT == 1)

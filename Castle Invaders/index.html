@@ -221,6 +221,7 @@
             
             atualizeButtons()
             atualizePos()
+            
         }
         function controls()
         {   context.fillStyle = "#56DF6D";
@@ -308,6 +309,16 @@
             context.fillRect(0,0, canvas.width, canvas.height);
             txt(canvas.width*.5, canvas.height*.15, 'EQUIPAMENTOS', 100,'white');
             hud.draw();
+            if(cheatCode!="")
+            {   if(cheatCodeT == 5)
+                {   cheatCode = "";
+                    cheatCodeT = 0;
+                }
+                cheatCodeT++;      
+                if(cheatCode[0] != "D")         
+                {   cheatCode = "";
+                } 
+            }
             
             atualizeButtons()
             atualizePos()
@@ -320,6 +331,16 @@
             atualizeButtons();
             atualizePos();
             hud.draw();
+            if(cheatCode!="")
+            {   if(cheatCodeT == 5)
+                {   cheatCode = "";
+                    cheatCodeT = 0;
+                }
+                cheatCodeT++;      
+                if(cheatCode[0] != "D")         
+                {   cheatCode = "";
+                } 
+            }
 
         }
         function inventory()
@@ -328,13 +349,22 @@
             txt(canvas.width*.5, canvas.height*.15, 'INVENTÁRIO', 100,'white');
             atualizeButtons();
             atualizePos();
+            if(cheatCode!="")
+            {   if(cheatCodeT == 5)
+                {   cheatCode = "";
+                    cheatCodeT = 0;
+                }
+                cheatCodeT++;      
+                if(cheatCode[0] != "D")         
+                {   cheatCode = "";
+                } 
+            }
         }
         // let multiplayer = false;
         // let players = [new Character(canvas.width/2-64, canvas.height-112, 96, 96, "imgs/perso-01.png")];
         function game()
         {   if(cheatCode!="")
-            {   console.log("ta aq")
-                if(cheatCodeT == 5)
+            {   if(cheatCodeT == 5)
                 {   cheatCode = "";
                     cheatCodeT = 0;
                 }
@@ -454,16 +484,18 @@
             {   keysP[keysP.indexOf(true)] = false;
             }
             cheatCode+=String.fromCharCode(event.keyCode);
-            if(cheatCode == "BETITO LINDAO".substring(0,cheatCode.length) || cheatCode == "DEV TESTE".substring(0,cheatCode.length))
+            if(cheatCode == "BETITO LINDAO".substring(0,cheatCode.length) || cheatCode == "DEV SUPER".substring(0,cheatCode.length))
             {   cheatCodeT = 0;
-                console.log(cheatCode)
                 if(cheatCode == "BETITO LINDAO")
                 {   console.log("cheat code betito lindão ativado!")
-                 
                     cheatCodeApply(0);
                 }
-                if(cheatCode == "DEV TESTE")
-                {   console.log("cheat code dev teste ativado!") 
+                if(cheatCode == "DEV")
+                {   console.log("cheat code dev ativado!") 
+                    cheatCodeApply(1);
+                }
+                if(cheatCode == "DEV SUPER")
+                {   console.log("cheat code dev ativado!") 
                     cheatCodeApply(1);
                 }
             }
@@ -490,19 +522,20 @@
                     this.projectileRO = 5;
                 break;
                 case 1:
-                    menuStatus.coins = 9999999999;
+                    menuStatus.coins = "∞";
                     for(let i = 0; (i < menuStatus.inventory.length); i++)
                     {   menuStatus.inventory[i].unlocked = 1;
                     }
                     for(let i = 0; (i < menuStatus.shopItens.length); i++)
                     {   menuStatus.shopItens[i].buyed = 1;
                     }
-                    for(let i = 0; (i < menuStatus.upgrades.length); i++)
-                    {   menuStatus.upgrades[i].effect += menuStatus.upgrades[i].up*menuStatus.upgrades[i].maxAmount;
-                        menuStatus.upgrades[i].actualAmount =  menuStatus.upgrades[i].maxAmount;
-                        menuStatus.upgrades[i].price = "Maximizado";
+                    if(cheatCode == "DEV SUPER")
+                    {   for(let i = 0; (i < menuStatus.upgrades.length); i++)
+                        {   menuStatus.upgrades[i].effect += menuStatus.upgrades[i].up*menuStatus.upgrades[i].maxAmount;
+                            menuStatus.upgrades[i].actualAmount =  menuStatus.upgrades[i].maxAmount;
+                            menuStatus.upgrades[i].price = "Maximizado";
+                        }
                     }
-                    
                 break;
             }
             cheatCodes[cheat] = true

@@ -63,8 +63,7 @@ class Enemy extends GameEntity
             timer = setInterval(finalScreen, 1000/FPS);
         }
         if(this.burningTime > 0)
-        {   console.log(this.hp, this.burningDamage, this.burningTime)
-            if(Math.random() >= 1)
+        {   if(Math.random() >= 1)
             {   this.burningDamage = 0;
                 this.burningTime = 0;
             }
@@ -75,7 +74,6 @@ class Enemy extends GameEntity
                     {   this.death();
                         this.hp = 0;
                         enemys.list.splice(this.pos, 1)
-                        console.log(this.pos)
                     }
                 }
             }
@@ -91,10 +89,9 @@ class Enemy extends GameEntity
         }
         for(let i = 0; (i < this.drops.length); i++)
         {   if(this.drops[i].unlock.unlocked != 1 && cheatCodes[0]==false)
-            {   let drop = Math.trunc(Math.random()*200);
+            {   let drop = Math.random();
                 if(drop < this.drops[i].dropChance)
                 {  enemys.coins.push(new Item(menuStatus.inventory.indexOf(this.drops[i].unlock)))
-                    console.log(menuStatus.inventory.indexOf(this.drops[i].unlock))
                     this.drops[i].unlock.unlocked = 1;
                 }
             }
@@ -118,20 +115,20 @@ class Enemy1 extends Enemy
         this.hp = this.Maxhp;
         this.damage = (10*difficult)*gameStatus.waveBooster;
         this.cooldown = 0;
-        this.attackSpeed = Math.round((FPS*2/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
-        this.attackSpeed = (this.attackSpeed < 15 ? 15 : this.attackSpeed)+castle.invencibility;
-        this.drops = [{dropChance: 2, unlock: menuStatus.inventory[1]}]
+        this.attackSpeed = Math.round((60/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
+        this.attackSpeed = (this.attackSpeed < 20 ? 20 : this.attackSpeed)+castle.invencibility;
+        this.drops = [{dropChance: .005, unlock: menuStatus.inventory[1]}]
     }
 }
 class Enemy2 extends Enemy
 {   constructor(x, y)
     {   super(x, y, 64, 64, "imgs/enemy2.png")
-        this.speed = 6;
+        this.speed = 5;
         this.Maxhp = (50*difficult)*gameStatus.waveBooster;
         this.hp = this.Maxhp;
         this.damage = (6*difficult)*gameStatus.waveBooster;
         this.cooldown = 0;
-        this.attackSpeed = Math.round((FPS/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
+        this.attackSpeed = Math.round((45/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
         this.attackSpeed = (this.attackSpeed < 15 ? 15 : this.attackSpeed)+castle.invencibility;
         this.coinsDrop = 2;
     }
@@ -141,14 +138,14 @@ class Enemy3 extends Enemy
     {   super(x, y, 96, 96, "imgs/enemy3.png")
         this.stepPoint.y = Math.round(castle.y-canvas.height*0.35);
         this.stepPoint.x -= this.width/2;
-        this.speed = 6;
-        this.Maxhp = (50*difficult)*gameStatus.waveBooster;
+        this.speed = 5;
+        this.Maxhp = (75*difficult)*gameStatus.waveBooster;
         this.hp = this.Maxhp;
         this.damage = (3*difficult)*gameStatus.waveBooster;
         this.cooldown = 0;
-        this.attackSpeed = Math.round((20/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
-        this.attackSpeed = (this.attackSpeed < 5 ? 5 : this.attackSpeed)+castle.invencibility;
-        this.drops = [{dropChance: 1, unlock: menuStatus.inventory[2]}]
+        this.attackSpeed = Math.round((40/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
+        this.attackSpeed = (this.attackSpeed < 10 ? 10 : this.attackSpeed)+castle.invencibility;
+        this.drops = [{dropChance: .001, unlock: menuStatus.inventory[2]}]
         this.coinsDrop = 3;
     }
     update()
