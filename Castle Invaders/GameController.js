@@ -7,22 +7,22 @@ class GameStatus
         setTimeout(this.initilizeGame, 1)
         this.upgradeQ = 3;
         this.upgrades = [ 
-            {name: "Attack Speed",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: +.1, upT: "+10%"},
-            {name: "Damage",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
-            {name: "Bullet Scale",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .1, upT: "+10%"},
-            {name: "Bullet Speed",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+1"},
-            {name: "Castle Life",price: 0, priceR: 0,effect: 0, maxAmount: 3, actualAmount: 0, up: 100, upT: "+100"},
+            {name: "Velocidade de Ataque",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: +.1, upT: "+10%"},
+            {name: "Dano",price: 0, priceR: 0, effect: 1, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
+            {name: "Tamanho do tiro",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .1, upT: "+10%"},
+            {name: "Velocidade do tiro",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+1"},
+            {name: "Vida do castelo",price: 0, priceR: 0,effect: 0, maxAmount: 3, actualAmount: 0, up: 100, upT: "+100"},
             {name: "Coins Drop",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
-            {name: "Castle Defense",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
-            {name: "Crit. Chance",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 10, upT: "+10%"},
-            {name: "Crit. Damage",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
-            {name: "Invencible Time",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+2 Frames"},
-            {name: "LifeSteal Chance",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
-            {name: "LifeSteal Amount",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
-            {name: "Thorns",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 4, upT: "+4%"},
+            {name: "Defesa do castelo",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
+            {name: "Chance Crit.",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 10, upT: "+10%"},
+            {name: "Dano Crit.",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
+            {name: "Invencibilidade",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+2 Frames"},
+            {name: "Chance LifeSteal",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
+            {name: "Roubo de vida",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
+            {name: "Espinhos",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 4, upT: "+4%"},
             {name: "knockback",price: 0, priceR: 0, effect: 0, maxAmount: 3, actualAmount: 0, up: 3, upT: "+3"},
-            {name: "full recovery", price: 0, priceR: 0,effect: 0, maxAmount: 99999999, actualAmount: 0, up: 1, upT: "Full Hp"},
-            {name: "Upgrades Amount", price: 0, priceR: 0,effect: 0, maxAmount: 10, actualAmount: 0, up: 1, upT: "+1 upgrade"}
+            {name: "Regenerar ", price: 0, priceR: 0,effect: 0, maxAmount: 99999999, actualAmount: 0, up: 1, upT: "Full Hp"},
+            {name: "Quantidade Upgrades", price: 0, priceR: 0,effect: 0, maxAmount: 10, actualAmount: 0, up: 1, upT: "+1 upgrade"}
         ];
         /*  upgrades nas waves, e upgrades do jogo também.
             attack speed
@@ -51,13 +51,13 @@ class GameStatus
                 weapon = new Slingshot(canvas.width/2-48, canvas.height-176, 96, 48);
             break;
             case 1:
-                weapon = new Sword(canvas.width/2-48, canvas.height-176, 96, 48);
+                weapon = new Sword(canvas.width/2-96, canvas.height-176, 128, 34);
             break;
             case 2: 
                 weapon = new Ak47(canvas.width/2-48, canvas.height-176, 96, 48);
             break;
             case 3:
-                weapon = new Grimore(canvas.width/2-48, canvas.height-176, 96, 48);
+                weapon = new Grimore(canvas.width/2-24, canvas.height-176, 48, 48);
             break;
         }
         
@@ -80,19 +80,19 @@ class MenuStatus
 {   constructor()
     {   this.coins = 0;
         this.upgrades = [ 
-            {name: "Attack Speed", price: 25, priceR: 25, effect: 1, maxAmount: 3, actualAmount: 0, up: +.1, upT: "+10%"},
-            {name: "Damage", price: 50, priceR: 50, effect: 1, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
-            {name: "Bullet Scale", price: 25, priceR: 25, effect: 1, maxAmount: 3, actualAmount: 0, up: .1, upT: "+10%"},
-            {name: "Bullet Speed", price: 25, priceR: 25, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+1"},
-            {name: "Castle Life", price: 25, priceR: 25,effect: 0, maxAmount: 3, actualAmount: 0, up: 100, upT: "+100"},
+            {name: "Velocidade de ataque", price: 25, priceR: 25, effect: 1, maxAmount: 3, actualAmount: 0, up: +.1, upT: "+10%"},
+            {name: "Dano", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
+            {name: "Tamanho do tiro", price: 25, priceR: 25, effect: 1, maxAmount: 3, actualAmount: 0, up: .1, upT: "+10%"},
+            {name: "Velocidade do tiro", price: 25, priceR: 25, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+1"},
+            {name: "Vida do Castelo", price: 25, priceR: 25,effect: 0, maxAmount: 3, actualAmount: 0, up: 100, upT: "+100"},
             {name: "Coins Drop", price: 100, priceR: 100, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
-            {name: "Castle Defense", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
-            {name: "Crit. Chance", price: 100, priceR: 75, effect: 0, maxAmount: 3, actualAmount: 0, up: 10, upT: "+10%"},
-            {name: "Crit. Damage", price: 75, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
-            {name: "Invencible Time", price: 100, priceR: 100, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+2 Frames"},
-            {name: "LifeSteal Chance", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
-            {name: "LifeSteal Amount", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
-            {name: "Thorns", price: 100, priceR: 100, effect: 0, maxAmount: 3, actualAmount: 0, up: 4, upT: "+4%"},
+            {name: "Defesa do Castelo", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
+            {name: "Chance Crit.", price: 100, priceR: 75, effect: 0, maxAmount: 3, actualAmount: 0, up: 10, upT: "+10%"},
+            {name: "Dano Crit", price: 75, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .25, upT: "+25%"},
+            {name: "invencibilidade", price: 100, priceR: 100, effect: 0, maxAmount: 3, actualAmount: 0, up: 2, upT: "+2 Frames"},
+            {name: "Chance LifeSteal", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: 5, upT: "+5%"},
+            {name: "Roubo de vida", price: 50, priceR: 50, effect: 0, maxAmount: 3, actualAmount: 0, up: .03, upT: "+3%"},
+            {name: "Espinhos", price: 100, priceR: 100, effect: 0, maxAmount: 3, actualAmount: 0, up: 4, upT: "+4%"},
             {name: "knockback", price: 200, priceR: 200, effect: 0, maxAmount: 3, actualAmount: 0, up: 3, upT: "+3"},
         ]
         this.inventory = [
@@ -124,24 +124,17 @@ class WaveController
     {   this.timer2 += this.timer2 < FPS;
         if(this.spawnTime <= 0)
         {   this.spawnTime = 20/1+(Math.trunc(gameStatus.wave/2)*.1);
-            let stop = false;
+            let spawnned = 0;
             if(Math.random()*50<=this.spawnChance)
             {   this.spawn(0);
-                stop = Math.random() >= .9;
-                console.log(stop)
+                spawnned++;
             }
-            else
-            {   if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 3 && !stop)
-                {   this.spawn(1);
-                    stop = Math.random() >= .9;
-                    console.log(stop)
-                }
-                else
-                {   if(Math.random()*50<=this.spawnChance && gameStatus.wave >= 6 && !stop)
-                    {   this.spawn(2);
-                        console.log(stop)
-                    }
-                }
+            if(Math.random()*50<=this.spawnChance-spawnned*2.5 && gameStatus.wave >= 3)
+            {   this.spawn(1);
+                spawnned++;
+            }
+            if(Math.random()*50<=this.spawnChance-spawnned*2.5 && gameStatus.wave >= 6)
+            {   this.spawn(2);
             }
             if((gameStatus.wave%10) == 0 && this.totalBoss > 0)
             {   this.spawn(3);

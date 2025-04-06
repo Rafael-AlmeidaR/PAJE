@@ -38,8 +38,11 @@ class Projectile extends Entity
                     if(castle.hp >= castle.Maxhp)
                     {   castle.hp = castle.Maxhp;
                     }
+                    
                 }
-                entity[i].hp -= weapon.damage*(critical <= weapon.critChance ? weapon.critDamage : 1);
+                let damage = weapon.damage*(critical <= weapon.critChance ? weapon.critDamage : 1)
+                entity[i].hp -= damage;
+                damagePopups.popups.push(new DamageP(this.x+this.width/2, this.y, critical <= weapon.critChance, Math.trunc(damage)))
                 entity[i].knockback = weapon.knockback;
                 if(fire <= this.fireSetChance)
                 {   entity[i].burningDamage = weapon.damage/10;

@@ -204,7 +204,7 @@ class InventoryButton extends Button
                 context.fillStyle = "red"
             }
         }
-        context.drawImage(this.img, this.x+this.height/8, this.y+1, this.width-this.height/4-2, this.height-this.height/4-2);
+        context.drawImage(this.img, this.x+1, this.y+1, this.width-2, this.height-this.height/4-2);
         context.fillRect(this.x+1, this.y+this.height-this.height/4, this.width-2, this.height/4);
         txt(this.x + this.width/2, this.y + this.height-this.height/8, buttonText, 20, "white");
     }
@@ -280,7 +280,8 @@ class EndGameButton extends SwitchSButton
     clicked()
     {   super.clicked();
         waveController = undefined;
-        menuStatus.coins += gameStatus.gameCoins;
+        if(menuStatus.coins != "∞")
+            menuStatus.coins += gameStatus.gameCoins;
     }
 }
 class SoundButton extends Button

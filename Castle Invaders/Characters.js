@@ -8,9 +8,7 @@ class Character extends GameEntity
         this.left = keys.keyLeft;
     }
     update()
-    {   this.x += (((keysP[keys.keyRight])*((this.x+this.width)<(castle.x+castle.width)))-((keysP[keys.keyLeft])*this.x>castle.x))*this.speed;
+    {   this.x += (((keysP[keys.keyRight])*((this.x+this.width)<(castle.x+castle.width-67)))-((keysP[keys.keyLeft])*this.x>castle.x+67))*this.speed;
         this.y += (((keysP[keys.keyDown])*(this.y+this.height < canvas.height))-((keysP[keys.keyUp])*this.y > castle.y))*this.speed;
-        weapon.y = this.y-weapon.height;
-        weapon.x = this.x;
     }
 }

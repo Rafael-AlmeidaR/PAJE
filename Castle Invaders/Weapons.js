@@ -15,15 +15,17 @@ class Weapon extends GameEntity
     }
     shoot(mouseCords)
     {   this.sound.currentTime = 0;
-        projectiles.Allprojectiles.push(new Projectile(this.x+this.width/2-2*this.projectileR/2, this.y-2*this.projectileR/2, 2*this.projectileR, 2*this.projectileR, this.imgP, mouseCords, this.ProjectileS, this.setFireChance))
+        projectiles.Allprojectiles.push(new Projectile(this.x+this.width/2-2*this.projectileR/2, this.y, 2*this.projectileR, 2*this.projectileR, this.imgP, mouseCords, this.ProjectileS, this.setFireChance))
     }
     update()
     {   this.fireRate -= this.fireRate>0;
+        this.y = player.y-this.height;
+        this.x = player.x;
     }
     weaponsConstructor()
     {   this.projectileR = this.projectileRO*(menuStatus.upgrades[2].effect+gameStatus.upgrades[2].effect);
         this.ProjectileS = this.ProjectileSO+(menuStatus.upgrades[3].effect+gameStatus.upgrades[3].effect);
-        this.damage = this.damageO+(menuStatus.upgrades[1].effect+gameStatus.upgrades[1].effect);
+        this.damage = this.damageO*(menuStatus.upgrades[1].effect+gameStatus.upgrades[1].effect);
         this.fireRate = 0;
         this.OfireRate = Math.round(this.OfireRateO/(menuStatus.upgrades[0].effect+gameStatus.upgrades[0].effect));
         this.critChance = this.critChanceO+(menuStatus.upgrades[7].effect+gameStatus.upgrades[7].effect);
@@ -55,7 +57,7 @@ class Sword extends Weapon
 {   constructor(x, y, width, height)
     {   super(x, y, width, height, "imgs/sword.png")
         this.projectileRO = 5;
-        this.damageO = 100;
+        this.damageO = 125;
         this.OfireRateO = 18;
         this.critChanceO = 5;
         this.critDamageO = 2;
@@ -67,7 +69,11 @@ class Sword extends Weapon
     }
     shoot(mouseCords)
     {   this.sound.pause();
-        projectiles.Allprojectiles.push(new Slash(this.x+this.width/2-this.projectileR*5, this.y-this.projectileR*5, this.projectileR*10, this.projectileR*5, mouseCords, this.ProjectileS))
+        projectiles.Allprojectiles.push(new Slash(this.x+this.width/2-this.projectileR*10, this.y, this.projectileR*20, this.projectileR*5, mouseCords, this.ProjectileS))
+    }
+    update()
+    {   super.update();
+        this.x = player.x-16;
     }
 }
 class Ak47 extends Weapon
@@ -77,7 +83,7 @@ class Ak47 extends Weapon
         this.ProjectileSO = 20;
         this.damageO = 30;
         this.OfireRateO = 8;
-        this.critChanceO = 20;
+        this.critChanceO = 25;
         this.critDamageO = 1.5;
         this.lifeStealChanceO = 0;
         this.lifeStealAmountO = .01;
@@ -104,6 +110,11 @@ class Grimore extends Weapon
         this.weaponsConstructor();
         this.imgP = new Image;
         this.imgP = "imgs/fireball.png"
-        this.setFireChance = 25;
+        this.setFireChance = 50;
+    }
+    update()
+    {   this.fireRate -= this.fireRate>0;
+        this.y = player.y-this.height;
+        this.x = player.x+this.width/2;
     }
 }

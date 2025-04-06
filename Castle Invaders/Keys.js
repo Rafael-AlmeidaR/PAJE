@@ -10,6 +10,6 @@ class Keys
         this.keysLetters = [String.fromCharCode(this.keyUp), String.fromCharCode(this.keyDown), String.fromCharCode(this.keyLeft), String.fromCharCode(this.keyRight), "mouse"]
         this.nKeys = [];
         this.switched = 0;
-        this.keysO = [87, 83, 65, 68, 13]
+        this.keysO = [87, 83, 65, 68, 13];
     }
 }

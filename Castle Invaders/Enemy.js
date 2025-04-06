@@ -63,19 +63,20 @@ class Enemy extends GameEntity
             timer = setInterval(finalScreen, 1000/FPS);
         }
         if(this.burningTime > 0)
-        {   if(Math.random() >= 1)
-            {   this.burningDamage = 0;
-                this.burningTime = 0;
-            }
-            else
-            {   if(this.burningTime%3 == 0)
+        {   if(this.burningTime%3 == 0 )
+            {   console.log(this.burningTime)
+                if(Math.random() >= .9 && this.burningTime < 30)
+                {   this.burningDamage = 0;
+                    this.burningTime = 0;
+                }
+                else
                 {   this.hp-=this.burningDamage;
                     if(this.hp <= 0)
                     {   this.death();
                         this.hp = 0;
                         enemys.list.splice(this.pos, 1)
                     }
-                }
+                }   
             }
         }
         this.burningTime--;
@@ -90,7 +91,7 @@ class Enemy extends GameEntity
         for(let i = 0; (i < this.drops.length); i++)
         {   if(this.drops[i].unlock.unlocked != 1 && cheatCodes[0]==false)
             {   let drop = Math.random();
-                if(drop < this.drops[i].dropChance)
+                if(drop <= this.drops[i].dropChance*(difficult/.5))
                 {  enemys.coins.push(new Item(menuStatus.inventory.indexOf(this.drops[i].unlock)))
                     this.drops[i].unlock.unlocked = 1;
                 }
@@ -102,7 +103,7 @@ class Enemy extends GameEntity
     {   super.draw();
         if(this.burningTime > 0)
         {   let iF = new Image;
-            iF.src = "imgs/grimore.png"
+            iF.src = "imgs/fire.png"
             context.drawImage(iF, this.x, this.y, this.width, this.height)
         }
     }
@@ -117,7 +118,7 @@ class Enemy1 extends Enemy
         this.cooldown = 0;
         this.attackSpeed = Math.round((60/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
         this.attackSpeed = (this.attackSpeed < 20 ? 20 : this.attackSpeed)+castle.invencibility;
-        this.drops = [{dropChance: .005, unlock: menuStatus.inventory[1]}]
+        this.drops = [{dropChance: .01, unlock: menuStatus.inventory[1]}]
     }
 }
 class Enemy2 extends Enemy
@@ -145,7 +146,7 @@ class Enemy3 extends Enemy
         this.cooldown = 0;
         this.attackSpeed = Math.round((40/(difficult-1>0 ? difficult : 1))/gameStatus.waveBooster);
         this.attackSpeed = (this.attackSpeed < 10 ? 10 : this.attackSpeed)+castle.invencibility;
-        this.drops = [{dropChance: .001, unlock: menuStatus.inventory[2]}]
+        this.drops = [{dropChance: .005, unlock: menuStatus.inventory[2]}]
         this.coinsDrop = 3;
     }
     update()

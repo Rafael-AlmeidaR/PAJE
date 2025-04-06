@@ -24,3 +24,34 @@ class Item extends Coin
         context.drawImage(this.img,canvas.width/2 + canvas.width*.125, canvas.height*.125-16, 32, 32)
     }
 }
+class DamageP
+{   constructor(x, y, crit,damage)
+    {   this.x = x;
+        this.y = y;
+        this.timer = 15;
+        this.crit = crit
+        this.damage = damage;
+    }
+    draw()
+    {   this.color = this.crit ? "yellow" : "red"
+        txt(this.x, this.y, "-"+this.damage, 15, this.color)
+    }
+    update()
+    {   this.timer--;
+    }
+}
+class Damages
+{   constructor()
+    {   this.popups = [];
+    }
+    draw()
+    {   for(let i = 0; (i < this.popups.length); i++)
+        {   this.popups[i].update();
+            this.popups[i].draw();
+            if(this.popups[i].timer <= 0)
+            {   this.popups.splice(i, 1)
+                i--;
+            }
+        }
+    }
+}

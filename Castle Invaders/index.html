@@ -70,6 +70,7 @@
         let cheatCode = "";
         let cheatCodeT = 0;
         let cheatCodes = [false, false];
+        let damagePopups = new Damages();
         keysP[87] = false;
         keysP[83] = false;
         keysP[65] = false;
@@ -203,7 +204,7 @@
             atualizeButtons()
             atualizePos()
             if(cheatCode!="")
-            {   if(cheatCodeT == 5)
+            {   if(cheatCodeT == 10)
                 {   cheatCode = "";
                     cheatCodeT = 0;
                 }
@@ -310,7 +311,7 @@
             txt(canvas.width*.5, canvas.height*.15, 'EQUIPAMENTOS', 100,'white');
             hud.draw();
             if(cheatCode!="")
-            {   if(cheatCodeT == 5)
+            {   if(cheatCodeT == 10)
                 {   cheatCode = "";
                     cheatCodeT = 0;
                 }
@@ -332,7 +333,7 @@
             atualizePos();
             hud.draw();
             if(cheatCode!="")
-            {   if(cheatCodeT == 5)
+            {   if(cheatCodeT == 10)
                 {   cheatCode = "";
                     cheatCodeT = 0;
                 }
@@ -350,7 +351,7 @@
             atualizeButtons();
             atualizePos();
             if(cheatCode!="")
-            {   if(cheatCodeT == 5)
+            {   if(cheatCodeT == 10)
                 {   cheatCode = "";
                     cheatCodeT = 0;
                 }
@@ -364,7 +365,7 @@
         // let players = [new Character(canvas.width/2-64, canvas.height-112, 96, 96, "imgs/perso-01.png")];
         function game()
         {   if(cheatCode!="")
-            {   if(cheatCodeT == 5)
+            {   if(cheatCodeT == 10)
                 {   cheatCode = "";
                     cheatCodeT = 0;
                 }
@@ -393,14 +394,13 @@
                     weapon.fireRate = weapon.OfireRate;
                 }
                 hud.draw();
-                
-                
+                damagePopups.draw();
             }
             else
-            {   hud.draw();
-                castle.draw();
+            {   castle.draw();
                 player.draw();
                 weapon.draw();
+                hud.draw();
                 atualizeButtons();
                 atualizePos();
             }
@@ -484,18 +484,18 @@
             {   keysP[keysP.indexOf(true)] = false;
             }
             cheatCode+=String.fromCharCode(event.keyCode);
-            if(cheatCode == "BETITO LINDAO".substring(0,cheatCode.length) || cheatCode == "DEV SUPER".substring(0,cheatCode.length))
+            if(cheatCode == "BETITO LINDAO".substring(0,cheatCode.length) || cheatCode == "DEV SUPER".substring(0,cheatCode.length) )
             {   cheatCodeT = 0;
-                if(cheatCode == "BETITO LINDAO")
-                {   console.log("cheat code betito lindão ativado!")
-                    cheatCodeApply(0);
+                if(cheatCode == "BETITO LINDAO" && cheatCodes[0] == false)
+                {   console.log("cheat code betito lindão ativado!");
+                    cheatCodeApply(0); 
                 }
-                if(cheatCode == "DEV")
-                {   console.log("cheat code dev ativado!") 
+                if(cheatCode == "DEV"  && menuStatus.coins != "∞")
+                {   console.log("cheat code dev ativado!"); 
                     cheatCodeApply(1);
                 }
-                if(cheatCode == "DEV SUPER")
-                {   console.log("cheat code dev ativado!") 
+                if(cheatCode == "DEV SUPER" && cheatCodes[1] == false)
+                {   console.log("cheat code dev ativado!"); 
                     cheatCodeApply(1);
                 }
             }
@@ -515,11 +515,14 @@
                     weapon.projectileRO = 20;
                     weapon.projectileR = 20;
                     weapon.critChanceO = 100;
+                    weapon.critChance = 100;
                     weapon.critDamageO = 10000000;
+                    weapon.critDamage = 10000000;
                     weapon.OfireRateO = 0;
                     weapon.OfireRate = 0;
                     gameStatus.upgrades[5].effect = -10000000000000;
                     this.projectileRO = 5;
+                    cheatCodes[cheat] = true
                 break;
                 case 1:
                     menuStatus.coins = "∞";
@@ -535,10 +538,10 @@
                             menuStatus.upgrades[i].actualAmount =  menuStatus.upgrades[i].maxAmount;
                             menuStatus.upgrades[i].price = "Maximizado";
                         }
+                        cheatCodes[cheat] = true
                     }
                 break;
             }
-            cheatCodes[cheat] = true
         }
         function txt(x,y,tex,px,clr)
         {   context.font = `${px}px Arial`;
