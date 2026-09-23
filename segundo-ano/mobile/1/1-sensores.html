@@ -34,7 +34,7 @@ function init()
             }
 			var r = event.rotationRate;
 			var html = "<strong>Acceleration</strong><br>x: "+((x*10)|0)/10+"<br>y: "+((y*10)|0)/10+"<br>z: "+((z*10)|0)/10+"<br><strong>Rotation rate</strong><br>";
-            if (r != null) html += "alpha: "+((r.alpha*10)|0)/10+"<br>beta: "+((r.beta*10)|0)/10+"<br>gamma: "+((r.gamma*10)|0)/10+"<br>";
+            if (r != null) html += "alpha: "+r.alpha+"<br>beta: "+r.beta+"<br>gamma: "+r.gamma+"<br>";
 			div2.innerHTML = html;
 		}, false);
 	}
