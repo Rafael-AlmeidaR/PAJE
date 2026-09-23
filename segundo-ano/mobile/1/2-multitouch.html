@@ -1,0 +1,61 @@
+<html>
+<body>
+<canvas id=canvas1 width=800 height=600></canvas>
+</body>
+<script>
+var canvas = document.getElementById("canvas1");
+var contexto = canvas.getContext("2d");
+var fps = 20;
+
+function Dedo(id, x, y)
+{	this.id = id;
+	this.x = x;
+	this.y = y;
+}
+
+var dedos = [];
+
+function procura(id)
+{	for (var i = 0; i < dedos.length; i++) if (id == dedos[i].id) return(i);
+	return(-1);
+}
+
+canvas.addEventListener("touchstart", function(e)
+{	e.preventDefault();
+	var toques = e.changedTouches;
+	for (var i = 0; i < toques.length; i++) dedos.push(new Dedo(toques[i].identifier, toques[i].clientX, toques[i].clientY));
+}, false);
+
+canvas.addEventListener("touchend", function(e)
+{	e.preventDefault();
+	var toques = e.changedTouches;
+	for (var i = 0; i < toques.length; i++)
+	{	var p = procura(toques[i].identifier);
+		if (p != -1) dedos.splice(p, 1);
+	}
+}, false);
+
+canvas.addEventListener("touchmove", function(e)
+{	e.preventDefault();
+	var toques = e.changedTouches;
+	for (var i = 0; i < toques.length; i++)
+	{	var p = procura(toques[i].identifier);
+		if (p != -1)
+		{	dedos[p].x = toques[i].clientX;
+			dedos[p].y = toques[i].clientY;
+		}
+	}
+}, false);
+
+function loop()
+{	contexto.fillStyle = "blue";
+	contexto.fillRect(0, 0, 800, 600);
+
+	contexto.fillStyle = "red";
+	for (var i = 0; i < dedos.length; i++) contexto.fillRect(dedos[i].x-25, dedos[i].y-25, 50, 50);
+}
+
+var timer1 = setInterval(loop, 1000/fps);
+</script>
+</html>
+

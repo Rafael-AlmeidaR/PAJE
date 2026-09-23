@@ -1,0 +1,103 @@
+<html>
+<body>
+<canvas id=canvas1 width=800 height=600></canvas>
+</body>
+<script>
+var canvas = document.getElementById("canvas1");
+var contexto = canvas.getContext("2d");
+var fps = 20;
+
+var lados = 4;
+var raio = 100;
+
+var angulo = 0;
+
+var distancia1 = 0;
+var distancia2 = 0;
+
+function Dedo(id, x, y, t)
+{	this.id = id;
+	this.x = x;
+	this.y = y;
+	this.t = t;
+}
+
+var dedos = [];
+
+function procura(id)
+{	for (var i = 0; i < dedos.length; i++) if (id == dedos[i].id) return(i);
+	return(-1);
+}
+
+canvas.addEventListener("touchstart", function(e)
+{	e.preventDefault();
+	var toques = e.changedTouches;
+	for (var i = 0; i < toques.length; i++) dedos.push(new Dedo(toques[i].identifier, toques[i].clientX, toques[i].clientY, (new Date()).getTime()));
+
+	if (dedos.length == 2)
+	{	distancia1 = distancia2 = Math.round(Math.sqrt((dedos[0].x-dedos[1].x)*(dedos[0].x-dedos[1].x)+(dedos[0].y-dedos[1].y)*(dedos[0].y-dedos[1].y)));
+		angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
+	}
+}, false);
+
+canvas.addEventListener("touchend", function(e)
+{	e.preventDefault();
+	var toques = e.changedTouches;
+	for (var i = 0; i < toques.length; i++)
+	{	var p = procura(toques[i].identifier);
+		if (p != -1)
+		{	if (((new Date).getTime()-dedos[i].t) <= 100)
+			{	if ((dedos[i].x >= 0) && (dedos[i].x <= 100) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) if (lados > 3) lados--;
+				if ((dedos[i].x >= 700) && (dedos[i].x <= 800) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) lados++;
+			}
+			dedos.splice(p, 1);
+		}
+	}
+}, false);
+
+canvas.addEventListener("touchmove", function(e)
+{	e.preventDefault();
+	var toques = e.changedTouches;
+	for (var i = 0; i < toques.length; i++)
+	{	var p = procura(toques[i].identifier);
+		if (p != -1)
+		{	dedos[p].x = toques[i].clientX;
+			dedos[p].y = toques[i].clientY;
+		}
+	}
+
+	if (dedos.length == 2)
+	{	distancia2 = Math.round(Math.sqrt((dedos[0].x-dedos[1].x)*(dedos[0].x-dedos[1].x)+(dedos[0].y-dedos[1].y)*(dedos[0].y-dedos[1].y)));
+		raio = 100+distancia2-distancia1;
+		angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
+	}
+}, false);
+
+function loop()
+{	contexto.fillStyle = "blue";
+	contexto.fillRect(0, 0, 800, 600);
+
+	contexto.fillStyle = "green";
+	contexto.fillRect(0, 0, 100, 100);
+	contexto.fillRect(700, 0, 100, 100);
+
+	contexto.fillStyle = "red";
+	for (var i = 0; i < dedos.length; i++) contexto.fillRect(dedos[i].x-25, dedos[i].y-25, 50, 50);
+
+	contexto.strokeStyle = "black";
+	contexto.beginPath();
+	var x, y, a;
+	for (a = 0; (a < 2*Math.PI); a += 2*Math.PI/lados)
+	{	x = 400+Math.cos(a+angulo)*raio;
+		y = 300+Math.sin(a+angulo)*raio;
+		if (a == 0) contexto.moveTo(x, y);
+		else contexto.lineTo(x, y);
+	}
+	contexto.closePath();
+	contexto.stroke();
+}
+
+var timer1 = setInterval(loop, 1000/fps);
+</script>
+</html>
+

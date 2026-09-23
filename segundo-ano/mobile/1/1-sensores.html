@@ -1,0 +1,44 @@
+<html>
+<body onload="init()">
+<div id="div1">No device orientation data</div>
+<div id="div2">No device motion data</div>
+</body>
+<script>
+function init()
+{	var div1 = document.getElementById("div1");
+	var div2 = document.getElementById("div2");
+
+	if (window.DeviceOrientationEvent)
+	{	window.addEventListener("deviceorientation", function(event)
+		{	var alpha = event.alpha;
+			var beta = event.beta;
+			var gamma = event.gamma;
+			if (alpha != null || beta != null || gamma != null) div1.innerHTML = "<strong>Orientation</strong><br>alpha: "+alpha+"<br>beta: "+beta+"<br>gamma: "+gamma;
+		}, false);
+	}
+
+	if (window.DeviceMotionEvent)
+	{	window.addEventListener("devicemotion", function(event)
+		{	var x;
+            var y;
+            var z;
+            if (event.accelerationIncludingGravity)
+			{	x = event.accelerationIncludingGravity.x;
+				y = event.accelerationIncludingGravity.y;
+				z = event.accelerationIncludingGravity.z;
+            }
+            else if (event.acceleration)
+			{	x = event.acceleration.x;
+				y = event.acceleration.y;
+				z = event.acceleration.z;
+            }
+			var r = event.rotationRate;
+			var html = "<strong>Acceleration</strong><br>x: "+x+"<br>y: "+y+"<br>z: "+z+"<br><strong>Rotation rate</strong><br>";
+            if (r != null) html += "alpha: "+r.alpha+"<br>beta: "+r.beta+"<br>gamma: "+r.gamma+"<br>";
+			div2.innerHTML = html;
+		}, false);
+	}
+}
+</script>
+</html>
+
