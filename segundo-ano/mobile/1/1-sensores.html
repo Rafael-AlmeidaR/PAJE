@@ -33,7 +33,7 @@ function init()
 				z = event.acceleration.z;
             }
 			var r = event.rotationRate;
-			var html = "<strong>Acceleration</strong><br>x: "+x+"<br>y: "+y+"<br>z: "+z+"<br><strong>Rotation rate</strong><br>";
+			var html = "<strong>Acceleration</strong><br>x: "+((x*10)|0)/10+"<br>y: "+((y*10)|0)/10+"<br>z: "+((z*10)|0)/10+"<br><strong>Rotation rate</strong><br>";
             if (r != null) html += "alpha: "+((r.alpha*10)|0)/10+"<br>beta: "+((r.beta*10)|0)/10+"<br>gamma: "+((r.gamma*10)|0)/10+"<br>";
 			div2.innerHTML = html;
 		}, false);
