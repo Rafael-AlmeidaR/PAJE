@@ -40,7 +40,7 @@
 
             update()
             {   let a = this.queda();
-                this.velocity += this.queda();
+                this.velocity = this.queda();
                 this.y += this.velocity;
                 if(this.y+this.radius > canvas.height)
                 {   this.y = canvas.height - this.radius;
