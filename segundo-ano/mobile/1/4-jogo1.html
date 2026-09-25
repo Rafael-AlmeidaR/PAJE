@@ -37,7 +37,7 @@
             }
 
             queda()
-            {   return Math.sin(gamma*Math.PI/180)*gravity - this.velocity**2/this.weight;
+            {   return Math.sin(gamma*Math.PI/180)*gravity - this.velocity*.01;
             }
 
             update()
