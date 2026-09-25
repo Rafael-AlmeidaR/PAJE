@@ -35,12 +35,11 @@
             }
 
             queda()
-            {   return beta - this.velocity**2/this.weight;
+            {   return Math.sin(beta*Math.PI/180)*gravity - this.velocity**2/this.weight;
             }
 
             update()
-            {   let a = this.queda();
-                this.velocity = this.queda();
+            {   this.velocity += this.queda();
                 this.y += this.velocity;
                 if(this.y+this.radius > canvas.height)
                 {   this.y = canvas.height - this.radius;
