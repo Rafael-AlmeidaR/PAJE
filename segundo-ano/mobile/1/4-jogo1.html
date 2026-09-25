@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ptbr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            overflow: hidden;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <script>
+        let beta = 0;
+        if (window.DeviceOrientationEvent)
+        {	window.addEventListener("deviceorientation", function(event)
+            {	//let alpha = ((event.alpha*10)|0)/10;
+                // let gamma = ((event.gamma*10)|0)/10;
+                beta = ((event.beta*10)|0)/10;
+            }, false);
+        }
+
+        class Ball
+        {   constructor(x, y, radius, density)
+            {   this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.density = density;
+                this.weight = density * Math.PI*this.radius**2;
+                this.color = `rgb(${(Math.random()*256)|0}, ${(Math.random()*256)|0}, ${(Math.random()*256)|0})`;
+                this.velocity = 0;
+            }
+
+            queda()
+            {   return beta - this.velocity**2/this.weight;
+            }
+
+            update()
+            {   let a = this.queda();
+                this.velocity += this.queda();
+                this.y += this.velocity;
+                if(this.y+this.radius > canvas.height)
+                {   this.y = canvas.height - this.radius;
+                    this.velocity = 0;
+                }
+                else if (this.y < 0)
+                {   this.y = this.radius;
+                }
+            }
+
+            draw()
+            {   ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+        
+        class Balls 
+        {   constructor(quantity)
+            {   this.list = [];
+                this.quantity = quantity;
+                let minD = 1;
+                let maxD = 2;
+                let minR = 10;
+                let maxR = 20;
+                for(let i = 0; (i < quantity); this.list[i++] = new Ball(Math.random()*canvas.width, Math.random()*canvas.height, minR+((Math.random()*(maxR-minR)*100)|0)/100, minD+((Math.random()*(maxD-minD)*100)|0)/100));
+            }
+
+            draw()
+            {   for(let i = 0; (i < this.quantity); this.list[i++].draw());
+            }
+            
+            update()
+            {   for(let i = 0; (i < this.quantity); this.list[i++].update());
+            }
+        }
+        let canvas = document.getElementById("canvas");
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+        let ctx = canvas.getContext("2d");
+
+        let balls = new Balls(100);
+
+        const FPS = 30;
+        const gravity = -9.8/FPS;
+        let timer = setInterval(loop, 1000/FPS);
+
+        function loop()
+        {   ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            balls.update();
+            balls.draw();
+        }
+</script>
+</body>
+</html>
