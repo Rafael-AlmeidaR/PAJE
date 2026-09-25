@@ -19,8 +19,8 @@
         // let beta = 0;
         if (window.DeviceOrientationEvent)
         {	window.addEventListener("deviceorientation", function(event)
-            {	//let alpha = ((event.alpha*10)|0)/10;
-                let gamma = ((event.gamma*10)|0)/10;
+            {	//alpha = ((event.alpha*10)|0)/10;
+                gamma = ((event.gamma*10)|0)/10;
                 // beta = ((event.beta*10)|0)/10;
             }, false);
         }
