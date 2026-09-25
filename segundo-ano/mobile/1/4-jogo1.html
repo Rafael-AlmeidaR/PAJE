@@ -14,12 +14,14 @@
 <body>
     <canvas id="canvas"></canvas>
     <script>
-        let beta = 0;
+        // let alpha = 0;
+        let gamma = 0;
+        // let beta = 0;
         if (window.DeviceOrientationEvent)
         {	window.addEventListener("deviceorientation", function(event)
             {	//let alpha = ((event.alpha*10)|0)/10;
-                // let gamma = ((event.gamma*10)|0)/10;
-                beta = ((event.beta*10)|0)/10;
+                let gamma = ((event.gamma*10)|0)/10;
+                // beta = ((event.beta*10)|0)/10;
             }, false);
         }
 
@@ -39,7 +41,7 @@
             }
 
             update()
-            {   this.velocity += this.queda();
+            {   this.velocity  = this.queda();
                 this.y += this.velocity;
                 if(this.y+this.radius > canvas.height)
                 {   this.y = canvas.height - this.radius;
@@ -85,7 +87,7 @@
         let balls = new Balls(100);
 
         const FPS = 30;
-        const gravity = -9.8/FPS;
+        const gravity = 9.8/FPS;
         let timer = setInterval(loop, 1000/FPS);
 
         function loop()
