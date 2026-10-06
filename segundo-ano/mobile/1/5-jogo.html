@@ -21,6 +21,7 @@
                 if (event.accelerationIncludingGravity) x = event.accelerationIncludingGravity.x;
                 else if (event.acceleration) x = event.acceleration.x;
                 if(x) accX = x;
+                else accX = 0;
             }, false);
         }
 
@@ -36,7 +37,7 @@
             }
 
             queda()
-            {   return Math.sin(accX*Math.PI/180)*gravity - this.velocity/this.weight; 
+            {   return accX*gravity - this.velocity/this.weight; 
             }
 
             update()
