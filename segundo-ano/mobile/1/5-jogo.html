@@ -36,7 +36,7 @@
             }
 
             queda()
-            {   return Math.sin(accX+45*Math.PI/180)*gravity - this.velocity/this.weight; //-45 || +45, so ta invertendo quando fica deitado -> aparentemente +45
+            {   return Math.sin(accX*Math.PI/180)*gravity - this.velocity/this.weight; 
             }
 
             update()
