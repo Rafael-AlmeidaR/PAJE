@@ -17,11 +17,8 @@
         let accX = 0;
         if (window.DeviceMotionEvent)
         {	window.addEventListener("devicemotion", function(event)
-            {   let x = 0;
-                if (event.accelerationIncludingGravity) x = event.accelerationIncludingGravity.x;
-                else if (event.acceleration) x = event.acceleration.x;
-                if(x) accX = x;
-                else accX = 0;
+            {   let a = event.acceleration;
+                accX = (a && a.x) || 0;
             }, false);
         }
 
