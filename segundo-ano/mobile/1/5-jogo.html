@@ -17,8 +17,7 @@
         let accX = 0;
         if (window.DeviceMotionEvent)
         {	window.addEventListener("devicemotion", function(event)
-            {   let a = event.acceleration;
-                accX = (a && a.x) || 0;
+            {   accX = (event.accelerationIncludingGravity && event.accelerationIncludingGravity.x) || 0;
             }, false);
         }
 
@@ -34,7 +33,7 @@
             }
 
             queda()
-            {   return accX*gravity - this.velocity/this.weight; 
+            {   return accX; 
             }
 
             update()
