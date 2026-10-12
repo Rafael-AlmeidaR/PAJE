@@ -14,10 +14,10 @@
 <body>
     <canvas id="canvas"></canvas>
     <script>
-        let accX = 0;
+        let accY = 0;
         if (window.DeviceMotionEvent)
         {	window.addEventListener("devicemotion", function(event)
-            {   accX = (event.accelerationIncludingGravity && event.accelerationIncludingGravity.x) || 0;
+            {   accY = (event.accelerationIncludingGravity && event.accelerationIncludingGravity.y) || 0;
             }, false);
         }
 
@@ -37,7 +37,7 @@
             }
 
             update()
-            {   this.velocity = this.queda();
+            {   this.velocity += this.queda();
                 this.y += this.velocity;
                 if(this.y+this.radius > canvas.height)
                 {   this.y = canvas.height - this.radius;
