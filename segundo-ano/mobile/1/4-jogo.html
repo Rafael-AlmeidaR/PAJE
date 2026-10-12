@@ -14,14 +14,10 @@
 <body>
     <canvas id="canvas"></canvas>
     <script>
-        // let alpha = 0;
-        let gamma = 0;
-        // let beta = 0;
-        if (window.DeviceOrientationEvent)
-        {	window.addEventListener("deviceorientation", function(event)
-            {	//alpha = ((event.alpha*10)|0)/10;
-                gamma = ((event.gamma*10)|0)/10;
-                // beta = ((event.beta*10)|0)/10;
+        let accX = 0;
+        if (window.DeviceMotionEvent)
+        {	window.addEventListener("devicemotion", function(event)
+            {   accX = (event.accelerationIncludingGravity && event.accelerationIncludingGravity.x) || 0;
             }, false);
         }
 
@@ -37,7 +33,7 @@
             }
 
             queda()
-            {   return Math.sin(gamma+45*Math.PI/180)*gravity - this.velocity/this.weight; //-45 || +45, so ta invertendo quando fica deitado -> aparentemente +45
+            {   return accX; 
             }
 
             update()
