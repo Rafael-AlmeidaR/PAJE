@@ -17,6 +17,7 @@ let distancia2 = 0;
 let x = 400, y = 300
 let cor = "blue";
 let a;
+let mais1 = Infinity;
 
 function Dedo(id, x, y, t)
 {	this.id = id;
@@ -77,12 +78,12 @@ canvas.addEventListener("touchmove", function(e)
 		mais1 = 0;
 	}
 	else
-	{	if (dedos.length == 1 && ((new Date())-dedos[0].t) >= 250 && mais1 >= 9)
+	{	if (dedos.length == 1 && mais1 >= 9) //&& ((new Date())-dedos[0].t) >= 250
 		{	let xPontos = yPontos = 0;
 
 			for (a = 0; (a < 2*Math.PI); a += 2*Math.PI/lados)
-			{	xPontos += (Math.cos(a+angulo)*raio)/lados; 
-				yPontos += (Math.sin(a+angulo)*raio)/lados;
+			{	xPontos += (Math.cos(a+angulo)*raio)/lados/2; 
+				yPontos += (Math.sin(a+angulo)*raio)/lados/2;
 			}
 			
 			x = dedos[0].x+xPontos;
