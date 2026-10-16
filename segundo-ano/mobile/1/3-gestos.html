@@ -1,134 +1,134 @@
-<html>
-<body>
-<canvas id=canvas1 width=800 height=600></canvas>
-</body>
-<script>
-let canvas = document.getElementById("canvas1");
-let contexto = canvas.getContext("2d");
-let fps = 20;
+	<html>
+	<body>
+	<canvas id=canvas1 width=800 height=600></canvas>
+	</body>
+	<script>
+	let canvas = document.getElementById("canvas1");
+	let contexto = canvas.getContext("2d");
+	let fps = 20;
 
-let lados = 4;
-let raio = 100;
+	let lados = 4;
+	let raio = 100;
 
-let angulo = 0;
+	let angulo = 0;
 
-let distancia1 = 0;
-let distancia2 = 0;
-let x = 400, y = 300
-let cor = "blue";
-let a;
-let mais1 = Infinity;
-let cooldownDobloue = 0
+	let distancia1 = 0;
+	let distancia2 = 0;
+	let x = 400, y = 300
+	let cor = "blue";
+	let a;
+	let mais1 = Infinity;
+	let cooldownDobloue = 0
 
-function Dedo(id, x, y, t)
-{	this.id = id;
-	this.x = x;
-	this.y = y;
-	this.t = t;
-}
-
-let dedos = [];
-
-function procura(id)
-{	for (let i = 0; i < dedos.length; i++) if (id == dedos[i].id) return(i);
-	return(-1);
-}
-
-canvas.addEventListener("touchstart", function(e)
-{	e.preventDefault();
-	let toques = e.changedTouches;
-	for (let i = 0; i < toques.length; i++) dedos.push(new Dedo(toques[i].identifier, toques[i].clientX, toques[i].clientY, (new Date()).getTime()));
-
-	if (dedos.length == 2)
-	{	distancia1 = distancia2 = Math.round(Math.sqrt((dedos[0].x-dedos[1].x)*(dedos[0].x-dedos[1].x)+(dedos[0].y-dedos[1].y)*(dedos[0].y-dedos[1].y)));
-		angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
+	function Dedo(id, x, y, t)
+	{	this.id = id;
+		this.x = x;
+		this.y = y;
+		this.t = t;
 	}
-}, false);
 
-canvas.addEventListener("touchend", function(e)
-{	e.preventDefault();
-	let toques = e.changedTouches;
-	for (let i = 0; i < toques.length; i++)
-	{	let p = procura(toques[i].identifier);
-		if (p != -1)
-		{	if (((new Date).getTime()-dedos[i].t) <= 100)
-			{	if (cooldownDobloue > 20)
-				{	if ((dedos[i].x >= 0) && (dedos[i].x <= 100) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) if (lados > 3) lados--;
-					if ((dedos[i].x >= 700) && (dedos[i].x <= 800) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) lados++;
+	let dedos = [];
+
+	function procura(id)
+	{	for (let i = 0; i < dedos.length; i++) if (id == dedos[i].id) return(i);
+		return(-1);
+	}
+
+	canvas.addEventListener("touchstart", function(e)
+	{	e.preventDefault();
+		let toques = e.changedTouches;
+		for (let i = 0; i < toques.length; i++) dedos.push(new Dedo(toques[i].identifier, toques[i].clientX, toques[i].clientY, (new Date()).getTime()));
+
+		if (dedos.length == 2)
+		{	distancia1 = distancia2 = Math.round(Math.sqrt((dedos[0].x-dedos[1].x)*(dedos[0].x-dedos[1].x)+(dedos[0].y-dedos[1].y)*(dedos[0].y-dedos[1].y)));
+			angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
+		}
+	}, false);
+
+	canvas.addEventListener("touchend", function(e)
+	{	e.preventDefault();
+		let toques = e.changedTouches;
+		for (let i = 0; i < toques.length; i++)
+		{	let p = procura(toques[i].identifier);
+			if (p != -1)
+			{	if (((new Date).getTime()-dedos[i].t) <= 100)
+				{	if (cooldownDobloue > 20)
+					{	if ((dedos[i].x >= 0) && (dedos[i].x <= 100) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) if (lados > 3) lados--;
+						if ((dedos[i].x >= 700) && (dedos[i].x <= 800) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) lados++;
+					}
+					else
+					{	cor = `rgb(${(Math.random()*256)|0}, ${(Math.random()*256)|0}, ${(Math.random()*256)|0})`;
+						alert("dobloue");
+						cooldownDobloue = 0;
+					}
 				}
-				else
-				{	cor = `rgb(${(Math.random()*256)|0}, ${(Math.random()*256)|0}, ${(Math.random()*256)|0})`;
-					alert("dobloue");
-					cooldownDobloue = 0;
+				dedos.splice(p, 1);
+			}
+		}
+	}, false);
+
+	canvas.addEventListener("touchmove", function(e)
+	{	e.preventDefault();
+		let toques = e.changedTouches;
+		for (let i = 0; i < toques.length; i++)
+		{	let p = procura(toques[i].identifier);
+			if (p != -1)
+			{	dedos[p].x = toques[i].clientX;
+				dedos[p].y = toques[i].clientY;
+			}
+		}
+
+
+		if (dedos.length == 2)
+		{	distancia2 = Math.round(Math.sqrt((dedos[0].x-dedos[1].x)*(dedos[0].x-dedos[1].x)+(dedos[0].y-dedos[1].y)*(dedos[0].y-dedos[1].y)));
+			raio = 100+distancia2-distancia1;
+			angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
+			mais1 = 0;
+		}
+		else
+		{	if (dedos.length == 1 && ((new Date())-dedos[0].t) >= 250 && mais1 >= 9)
+			{	let xPontos = yPontos = 0;
+
+				for (a = 0; (a < 2*Math.PI); a += 2*Math.PI/lados)
+				{	xPontos += (Math.cos(a+angulo)*raio); 
+					yPontos += (Math.sin(a+angulo)*raio);
 				}
+				
+				x = dedos[0].x+xPontos/2;
+				y = dedos[0].y+yPontos/2;
 			}
-			dedos.splice(p, 1);
 		}
-	}
-}, false);
+	}, false);
 
-canvas.addEventListener("touchmove", function(e)
-{	e.preventDefault();
-	let toques = e.changedTouches;
-	for (let i = 0; i < toques.length; i++)
-	{	let p = procura(toques[i].identifier);
-		if (p != -1)
-		{	dedos[p].x = toques[i].clientX;
-			dedos[p].y = toques[i].clientY;
+	function loop()
+	{	contexto.fillStyle = cor;
+		contexto.fillRect(0, 0, 800, 600);
+
+		contexto.fillStyle = "green";
+		contexto.fillRect(0, 0, 100, 100);
+		contexto.fillRect(700, 0, 100, 100);
+
+		contexto.fillStyle = "red";
+		for (let i = 0; i < dedos.length; i++) contexto.fillRect(dedos[i].x-25, dedos[i].y-25, 50, 50);
+
+		contexto.strokeStyle = "black";
+		contexto.beginPath();
+		
+		for (a = 0; (a < 2*Math.PI); a += 2*Math.PI/lados)
+		{	x += Math.cos(a+angulo)*raio; 
+			y += Math.sin(a+angulo)*raio;
+			if (a == 0) contexto.moveTo(x, y);
+			else contexto.lineTo(x, y);
 		}
+		contexto.closePath();
+		contexto.stroke();
+
+		cooldownDobloue++;
+		contexto.fillText(cooldownDobloue, 700, 500)
+		mais1++;
 	}
 
-
-	if (dedos.length == 2)
-	{	distancia2 = Math.round(Math.sqrt((dedos[0].x-dedos[1].x)*(dedos[0].x-dedos[1].x)+(dedos[0].y-dedos[1].y)*(dedos[0].y-dedos[1].y)));
-		raio = 100+distancia2-distancia1;
-		angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
-		mais1 = 0;
-	}
-	else
-	{	if (dedos.length == 1 && ((new Date())-dedos[0].t) >= 250 && mais1 >= 9)
-		{	let xPontos = yPontos = 0;
-
-			for (a = 0; (a < 2*Math.PI); a += 2*Math.PI/lados)
-			{	xPontos += (Math.cos(a+angulo)*raio); 
-				yPontos += (Math.sin(a+angulo)*raio);
-			}
-			
-			x = dedos[0].x+xPontos/2;
-			y = dedos[0].y+yPontos/2;
-		}
-	}
-}, false);
-
-function loop()
-{	contexto.fillStyle = cor;
-	contexto.fillRect(0, 0, 800, 600);
-
-	contexto.fillStyle = "green";
-	contexto.fillRect(0, 0, 100, 100);
-	contexto.fillRect(700, 0, 100, 100);
-
-	contexto.fillStyle = "red";
-	for (let i = 0; i < dedos.length; i++) contexto.fillRect(dedos[i].x-25, dedos[i].y-25, 50, 50);
-
-	contexto.strokeStyle = "black";
-	contexto.beginPath();
-	
-	for (a = 0; (a < 2*Math.PI); a += 2*Math.PI/lados)
-	{	x += Math.cos(a+angulo)*raio; 
-		y += Math.sin(a+angulo)*raio;
-		if (a == 0) contexto.moveTo(x, y);
-		else contexto.lineTo(x, y);
-	}
-	contexto.closePath();
-	contexto.stroke();
-
-	cooldownDobloue++;
-	contexto.drawText(cooldownDobloue, 700, 500)
-	mais1++;
-}
-
-let timer1 = setInterval(loop, 1000/fps);
-</script>
-</html>
+	let timer1 = setInterval(loop, 1000/fps);
+	</script>
+	</html>
 
