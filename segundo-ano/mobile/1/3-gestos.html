@@ -67,17 +67,20 @@ canvas.addEventListener("touchmove", function(e)
 		}
 	}
 
+
 	if (dedos.length == 2)
 	{	distancia2 = Math.round(Math.sqrt((dedos[0].x-dedos[1].x)*(dedos[0].x-dedos[1].x)+(dedos[0].y-dedos[1].y)*(dedos[0].y-dedos[1].y)));
 		raio = 100+distancia2-distancia1;
 		angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
+		mais1 = 0;
 	}
 	else
-	{	if (dedos.length == 1 && ((new Date())-dedos[0].t) >= 500)
+	{	if (dedos.length == 1 && ((new Date())-dedos[0].t) >= 250 && mais1 >= 9)
 		{	x = dedos[0].x;
 			y = dedos[0].y;
 		}
 	}
+	mais1++;
 }, false);
 
 function loop()
@@ -105,7 +108,11 @@ function loop()
 }
 
 var timer1 = setInterval(loop, 1000/fps);
-// hold, drag, doblouetap
+/*
+hold -> algo tipo um setinterval quando solta um dedo e tava na ação de 2 dedos que vai ficar por um tempo até permitir o hold
+
+dobloue -> um setInterval tbm pra esperar o tempo pra saber se é um dobloue tap
+*/
 </script>
 </html>
 
