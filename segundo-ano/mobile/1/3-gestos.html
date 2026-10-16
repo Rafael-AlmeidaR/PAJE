@@ -14,6 +14,7 @@ var angulo = 0;
 
 var distancia1 = 0;
 var distancia2 = 0;
+var x = 400, y = 300
 
 function Dedo(id, x, y, t)
 {	this.id = id;
@@ -71,6 +72,12 @@ canvas.addEventListener("touchmove", function(e)
 		raio = 100+distancia2-distancia1;
 		angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
 	}
+	else
+	{	if (dedos.length == 1)
+		{	x = dedos[0].x;
+			y = dedos[0].y;
+		}
+	}
 }, false);
 
 function loop()
@@ -86,10 +93,10 @@ function loop()
 
 	contexto.strokeStyle = "black";
 	contexto.beginPath();
-	var x, y, a;
+	var a;
 	for (a = 0; (a < 2*Math.PI); a += 2*Math.PI/lados)
-	{	x = 400+Math.cos(a+angulo)*raio;
-		y = 300+Math.sin(a+angulo)*raio;
+	{	x += Math.cos(a+angulo)*raio; 
+		y += Math.sin(a+angulo)*raio;
 		if (a == 0) contexto.moveTo(x, y);
 		else contexto.lineTo(x, y);
 	}
@@ -98,6 +105,7 @@ function loop()
 }
 
 var timer1 = setInterval(loop, 1000/fps);
+// hold, drag, doblouetap
 </script>
 </html>
 
