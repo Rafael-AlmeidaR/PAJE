@@ -52,14 +52,14 @@ canvas.addEventListener("touchend", function(e)
 	{	let p = procura(toques[i].identifier);
 		if (p != -1)
 		{	if (((new Date).getTime()-dedos[i].t) <= 100)
-			{	if (cooldownDobloue > 5)
+			{	if (cooldownDobloue > 20)
 				{	if ((dedos[i].x >= 0) && (dedos[i].x <= 100) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) if (lados > 3) lados--;
 					if ((dedos[i].x >= 700) && (dedos[i].x <= 800) && (dedos[i].y >= 0) && (dedos[i].y <= 100)) lados++;
 				}
 				else
-				{	cooldownDobloue = 0;
-					cor = `rgb(${(Math.random()*256)|0}, ${(Math.random()*256)|0}, ${(Math.random()*256)|0})`;
-					alert("dobloue")
+				{	cor = `rgb(${(Math.random()*256)|0}, ${(Math.random()*256)|0}, ${(Math.random()*256)|0})`;
+					alert("dobloue");
+					cooldownDobloue = 0;
 				}
 			}
 			dedos.splice(p, 1);
