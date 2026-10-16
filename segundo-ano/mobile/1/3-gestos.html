@@ -73,7 +73,7 @@ canvas.addEventListener("touchmove", function(e)
 		angulo = Math.atan2(dedos[0].y-dedos[1].y, dedos[0].x-dedos[1].x);
 	}
 	else
-	{	if (dedos.length == 1)
+	{	if (dedos.length == 1 && ((new Date())-dedos[0].t) >= 500)
 		{	x = dedos[0].x;
 			y = dedos[0].y;
 		}
