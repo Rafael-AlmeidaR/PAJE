@@ -59,6 +59,7 @@ canvas.addEventListener("touchend", function(e)
 				else
 				{	cooldownDobloue = 0;
 					cor = `rgb(${(Math.random()*256)|0}, ${(Math.random()*256)|0}, ${(Math.random()*256)|0})`;
+					alert("dobloue")
 				}
 			}
 			dedos.splice(p, 1);
@@ -127,11 +128,6 @@ function loop()
 }
 
 let timer1 = setInterval(loop, 1000/fps);
-/*
-hold -> algo tipo um setinterval quando solta um dedo e tava na ação de 2 dedos que vai ficar por um tempo até permitir o hold
-
-dobloue -> um setInterval tbm pra esperar o tempo pra saber se é um dobloue tap
-*/
 </script>
 </html>
 
